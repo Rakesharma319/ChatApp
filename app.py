@@ -81,30 +81,24 @@ if UserInput := st.chat_input("Create a Snowflake query for top 5 customers by m
 	with st.chat_message("user"):
 		st.markdown(UserInput)
 		
-	# Display assistant response in chat message container
-	with st.chat_message("assistant"):
-		message_placeholder = st.empty()
-		full_response = ""
-		for response in openai.ChatCompletion.create(
+		full_response = openai.ChatCompletion.create(
 			model=st.session_state["openai_model"],
 			messages = [{"role": "user", "content": f'''{Prompt},Question: {UserInput}'''}],
 			temperature=0,
 			max_tokens=300,
 			stream=True
 		):
-			full_response += response.choices[0].delta.get("content", "")
-			message_placeholder.markdown(full_response + "▌")
-		#message_placeholder.markdown(full_response)
 		
 		# Execute SQL in Database.
 		OutPut_raw=full_response
 		RawSQL=f"{OutPut_raw}"
 		CleanSQL=RawSQL.replace("SQLQuery: \n","")
 		Database_Output=sq(f'''{CleanSQL}''',conn)
-	st.text(full_response)
-	st.table(Database_Output)
-	#st.session_state.messages.append({"role": "assistant", "content": full_response})
-	#st.session_state.messages.append({"role": "assistant", "content": Database_Output})
+
+	# Display assistant response in chat message container
+	with st.chat_message("assistant"):
+		st.text(full_response)
+		st.table(Database_Output)
 	
 	
 
