@@ -28,7 +28,6 @@ tables_List = sq(
     where type='table';'''
     ,conn)
 
-st.subheader("Tables List For Reference")
 st.sidebar.table(tables_List)
 
 
@@ -106,3 +105,7 @@ if UserInput := st.chat_input("Create a Snowflake query for top 5 customers by m
 	st.table(Database_Output)
 	#st.session_state.messages.append({"role": "assistant", "content": full_response})
 	#st.session_state.messages.append({"role": "assistant", "content": Database_Output})
+	
+	
+
+	
